@@ -1,0 +1,194 @@
+# **Complex Queries & Optimization**
+
+## **1. Agregasi Data**
+
+### **1.1 Fungsi Agregasi**
+Fungsi agregasi digunakan untuk melakukan perhitungan pada sekumpulan data dan mengembalikan satu nilai hasil perhitungan.
+
+- **COUNT:** Menghitung jumlah baris yang memenuhi kondisi tertentu.
+  ```sql
+  SELECT COUNT(*) FROM pelanggan;
+  ```
+
+- **SUM:** Menjumlahkan nilai dalam kolom tertentu.
+  ```sql
+  SELECT SUM(total_harga) FROM transaksi;
+  ```
+
+- **AVG:** Menghitung rata-rata nilai dalam kolom tertentu.
+  ```sql
+  SELECT AVG(harga) FROM produk;
+  ```
+
+- **MIN:** Menemukan nilai terkecil dalam kolom tertentu.
+  ```sql
+  SELECT MIN(harga) FROM produk;
+  ```
+
+- **MAX:** Menemukan nilai terbesar dalam kolom tertentu.
+  ```sql
+  SELECT MAX(harga) FROM produk;
+  ```
+
+### **1.2 GROUP BY dan HAVING**
+- **GROUP BY:** Mengelompokkan baris yang memiliki nilai yang sama ke dalam baris ringkasan.
+  ```sql
+  SELECT kategori_id, AVG(harga) 
+  FROM produk 
+  GROUP BY kategori_id;
+  ```
+
+- **HAVING:** Digunakan untuk memfilter hasil agregasi (mirip dengan WHERE, tetapi untuk GROUP BY).
+  ```sql
+  SELECT kategori_id, AVG(harga) 
+  FROM produk 
+  GROUP BY kategori_id 
+  HAVING AVG(harga) > 100000;
+  ```
+
+## **2. Tabel Joins**
+
+### **2.1 Jenis Join**
+- **INNER JOIN:** Mengembalikan baris yang memiliki nilai yang cocok di kedua tabel.
+  ```sql
+  SELECT pelanggan.nama, transaksi.total_harga 
+  FROM transaksi 
+  INNER JOIN pelanggan ON transaksi.pelanggan_id = pelanggan.id;
+  ```
+
+- **LEFT JOIN (LEFT OUTER JOIN):** Mengembalikan semua baris dari tabel kiri (tabel pertama) dan baris yang cocok dari tabel kanan (tabel kedua). Jika tidak ada yang cocok, hasilnya adalah NULL di sisi kanan.
+  ```sql
+  SELECT pelanggan.nama, transaksi.total_harga 
+  FROM pelanggan 
+  LEFT JOIN transaksi ON pelanggan.id = transaksi.pelanggan_id;
+  ```
+
+- **RIGHT JOIN (RIGHT OUTER JOIN):** Mengembalikan semua baris dari tabel kanan dan baris yang cocok dari tabel kiri. Jika tidak ada yang cocok, hasilnya adalah NULL di sisi kiri.
+  ```sql
+  SELECT pelanggan.nama, transaksi.total_harga 
+  FROM transaksi 
+  RIGHT JOIN pelanggan ON transaksi.pelanggan_id = pelanggan.id;
+  ```
+
+- **FULL JOIN (FULL OUTER JOIN):** Mengembalikan semua baris ketika ada kecocokan di salah satu tabel. Jika tidak ada yang cocok, hasilnya adalah NULL di sisi yang tidak memiliki kecocokan.
+  ```sql
+  SELECT pelanggan.nama, transaksi.total_harga 
+  FROM pelanggan 
+  FULL JOIN transaksi ON pelanggan.id = transaksi.pelanggan_id;
+  ```
+
+## **3. Subqueries**
+
+### **3.1 Apa itu Subquery?**
+Subquery adalah query di dalam query lain. Subquery dapat digunakan di dalam SELECT, INSERT, UPDATE, atau DELETE.
+
+- **Contoh Subquery dalam SELECT:**
+  ```sql
+  SELECT nama 
+  FROM pelanggan 
+  WHERE id IN (SELECT pelanggan_id FROM transaksi WHERE total_harga > 500000);
+  ```
+
+- **Contoh Subquery dalam WHERE:**
+  ```sql
+  SELECT nama, harga 
+  FROM produk 
+  WHERE harga > (SELECT AVG(harga) FROM produk);
+  ```
+
+## **4. Window Functions**
+
+### **4.1 Fungsi Analitik**
+Window functions memungkinkan Anda melakukan perhitungan pada sekumpulan baris yang terkait dengan baris saat ini.
+
+- **ROW_NUMBER():** Memberikan nomor urut untuk setiap baris dalam partisi.
+  ```sql
+  SELECT nama, harga, ROW_NUMBER() OVER (ORDER BY harga DESC) 
+  FROM produk;
+  ```
+
+- **RANK():** Memberikan peringkat untuk setiap baris dalam partisi, dengan peringkat yang sama untuk nilai yang sama.
+  ```sql
+  SELECT nama, harga, RANK() OVER (ORDER BY harga DESC) 
+  FROM produk;
+  ```
+
+- **OVER():** Menentukan partisi dan urutan untuk window function.
+  ```sql
+  SELECT nama, harga, AVG(harga) OVER (PARTITION BY kategori_id) 
+  FROM produk;
+  ```
+
+## **5. Optimasi Query**
+
+### **5.1 Indexing**
+Indexing digunakan untuk mempercepat query dengan membuat struktur data yang memungkinkan database menemukan baris tertentu dengan cepat.
+
+- **Membuat Index:**
+  ```sql
+  CREATE INDEX idx_pelanggan_nama ON pelanggan(nama);
+  ```
+
+- **Menghapus Index:**
+  ```sql
+  DROP INDEX idx_pelanggan_nama;
+  ```
+
+### **5.2 Execution Plan**
+Execution plan digunakan untuk menganalisis performa query dengan melihat bagaimana database akan mengeksekusi query tersebut.
+
+- **Menggunakan EXPLAIN:**
+  ```sql
+  EXPLAIN SELECT * FROM pelanggan WHERE kota = 'Jakarta';
+  ```
+
+## **6. Best Practices**
+
+### **6.1 Hindari SELECT ***
+Gunakan kolom spesifik daripada `SELECT *` untuk mengurangi beban pada database.
+```sql
+SELECT nama, email FROM pelanggan;
+```
+
+### **6.2 Gunakan LIMIT**
+Gunakan `LIMIT` untuk membatasi jumlah baris yang dikembalikan, terutama saat melakukan pengujian.
+```sql
+SELECT * FROM produk LIMIT 10;
+```
+
+### **6.3 Normalisasi Database**
+Normalisasi adalah proses mengorganisasi data dalam database untuk mengurangi redundansi dan meningkatkan integritas data.
+
+- **Bentuk Normal:**
+  - **1NF (First Normal Form):** Setiap kolom berisi nilai atomik.
+  - **2NF (Second Normal Form):** Memenuhi 1NF dan semua kolom non-kunci sepenuhnya bergantung pada primary key.
+  - **3NF (Third Normal Form):** Memenuhi 2NF dan semua kolom non-kunci tidak bergantung pada kolom non-kunci lainnya.
+
+## **7. Studi Kasus Lanjutan**
+
+### **7.1 Analisis Transaksi Berdasarkan Kategori Produk**
+```sql
+SELECT k.nama_kategori, COUNT(t.id) AS jumlah_transaksi, SUM(t.total_harga) AS total_pendapatan 
+FROM transaksi t 
+JOIN produk p ON t.produk_id = p.id 
+JOIN kategori k ON p.kategori_id = k.id 
+GROUP BY k.nama_kategori 
+ORDER BY total_pendapatan DESC;
+```
+
+### **7.2 Mencari Pelanggan dengan Transaksi Tertinggi**
+```sql
+SELECT p.nama, SUM(t.total_harga) AS total_pembelian 
+FROM transaksi t 
+JOIN pelanggan p ON t.pelanggan_id = p.id 
+GROUP BY p.nama 
+ORDER BY total_pembelian DESC 
+LIMIT 5;
+```
+
+### **7.3 Menggunakan Window Function untuk Analisis Produk**
+```sql
+SELECT nama, harga, kategori_id, 
+       RANK() OVER (PARTITION BY kategori_id ORDER BY harga DESC) AS peringkat_harga 
+FROM produk;
+```
