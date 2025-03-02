@@ -115,10 +115,38 @@ SELECT nama, email FROM pelanggan;
 - **FROM:** Menentukan tabel dari mana data akan diambil.
 
 ### **6.2 Contoh Query dengan WHERE**
+
+Klausa **WHERE** digunakan untuk memfilter data berdasarkan kondisi tertentu. Dengan **WHERE**, Anda dapat mengekstrak data yang memenuhi kriteria spesifik dari tabel. Berikut adalah penjelasan lebih luas beserta contoh-contoh penggunaannya:
+
+---
+
+#### **1. Filter Data Sederhana**
+Contoh paling dasar dari klausa **WHERE** adalah memfilter data berdasarkan nilai kolom tertentu.
+
+**Contoh:**
 ```sql
 SELECT * FROM produk WHERE harga > 100000;
 ```
-- **WHERE:** Digunakan untuk memfilter data berdasarkan kondisi tertentu.
+- **Penjelasan:** Query ini akan menampilkan semua produk yang memiliki harga lebih besar dari **100.000**.
+
+---
+
+#### **2. Filter Data dengan Operator Perbandingan**
+Anda dapat menggunakan operator perbandingan seperti `=`, `!=`, `>`, `<`, `>=`, dan `<=` untuk memfilter data.
+
+**Contoh:**
+```sql
+SELECT * FROM pelanggan WHERE kota = 'Jakarta';
+```
+- **Penjelasan:** Query ini akan menampilkan semua pelanggan yang berasal dari kota **Jakarta**.
+
+**Contoh Lain:**
+```sql
+SELECT * FROM produk WHERE stok <= 10;
+```
+- **Penjelasan:** Query ini akan menampilkan semua produk yang stoknya kurang dari atau sama dengan **10**.
+
+---
 
 ## **7. Filtering Data**
 
