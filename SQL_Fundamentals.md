@@ -123,12 +123,100 @@ SELECT * FROM produk WHERE harga > 100000;
 ## **7. Filtering Data**
 
 ### **7.1 Operator Logika: AND, OR, NOT**
+Berikut adalah penjelasan lengkap beserta contoh penggunaan operator logika **OR** dan **NOT** dalam SQL:
+
+---
+
+### **7.1 Operator Logika: AND, OR, NOT**
+
+#### **1. AND**
+Operator **AND** digunakan untuk menampilkan data yang memenuhi **semua kondisi** yang diberikan.
+
+**Contoh:**
 ```sql
-SELECT * FROM pelanggan WHERE kota = 'Jakarta' AND email LIKE '%example.com';
+SELECT * FROM pelanggan 
+WHERE kota = 'Jakarta' AND email LIKE '%example.com';
 ```
-- **AND:** Menampilkan data yang memenuhi semua kondisi.
-- **OR:** Menampilkan data yang memenuhi salah satu kondisi.
-- **NOT:** Menampilkan data yang tidak memenuhi kondisi.
+- **Penjelasan:** Query ini akan menampilkan semua pelanggan yang berasal dari kota **Jakarta** **dan** memiliki email yang diakhiri dengan `example.com`.
+
+---
+
+#### **2. OR**
+Operator **OR** digunakan untuk menampilkan data yang memenuhi **salah satu kondisi** yang diberikan.
+
+**Contoh:**
+```sql
+SELECT * FROM pelanggan 
+WHERE kota = 'Jakarta' OR kota = 'Bandung';
+```
+- **Penjelasan:** Query ini akan menampilkan semua pelanggan yang berasal dari kota **Jakarta** **atau** **Bandung**.
+
+**Contoh Lain:**
+```sql
+SELECT * FROM produk 
+WHERE harga < 100000 OR stok > 50;
+```
+- **Penjelasan:** Query ini akan menampilkan semua produk yang memiliki harga di bawah **100.000** **atau** stok lebih dari **50**.
+
+---
+
+#### **3. NOT**
+Operator **NOT** digunakan untuk menampilkan data yang **tidak memenuhi kondisi** yang diberikan.
+
+**Contoh:**
+```sql
+SELECT * FROM pelanggan 
+WHERE NOT kota = 'Jakarta';
+```
+- **Penjelasan:** Query ini akan menampilkan semua pelanggan yang **tidak** berasal dari kota **Jakarta**.
+
+**Contoh Lain:**
+```sql
+SELECT * FROM produk 
+WHERE NOT kategori_id = 1;
+```
+- **Penjelasan:** Query ini akan menampilkan semua produk yang **tidak** termasuk dalam kategori dengan `id = 1`.
+
+---
+
+### **Kombinasi Operator Logika**
+Anda dapat menggabungkan operator logika **AND**, **OR**, dan **NOT** dalam satu query untuk membuat kondisi yang lebih kompleks.
+
+**Contoh:**
+```sql
+SELECT * FROM pelanggan 
+WHERE (kota = 'Jakarta' OR kota = 'Bandung') 
+AND NOT email LIKE '%gmail.com';
+```
+- **Penjelasan:** Query ini akan menampilkan semua pelanggan yang berasal dari kota **Jakarta** atau **Bandung**, tetapi **tidak** memiliki email yang diakhiri dengan `gmail.com`.
+
+---
+
+### **Latihan Praktis**
+
+#### **Latihan 1: Menggunakan OR**
+Tampilkan semua produk yang memiliki harga di bawah **200.000** atau stok kurang dari **20**.
+```sql
+SELECT * FROM produk 
+WHERE harga < 200000 OR stok < 20;
+```
+
+#### **Latihan 2: Menggunakan NOT**
+Tampilkan semua transaksi yang **tidak** dilakukan oleh pelanggan dengan `id = 1`.
+```sql
+SELECT * FROM transaksi 
+WHERE NOT pelanggan_id = 1;
+```
+
+#### **Latihan 3: Kombinasi AND, OR, dan NOT**
+Tampilkan semua pelanggan yang berasal dari kota **Surabaya** atau **Yogyakarta**, tetapi **tidak** memiliki email yang diakhiri dengan `yahoo.com`.
+```sql
+SELECT * FROM pelanggan 
+WHERE (kota = 'Surabaya' OR kota = 'Yogyakarta') 
+AND NOT email LIKE '%yahoo.com';
+```
+
+---
 
 ### **7.2 Wildcard: LIKE**
 ```sql
