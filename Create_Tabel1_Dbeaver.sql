@@ -56,3 +56,19 @@ CREATE TABLE IF NOT EXISTS public.transaksi (
 SELECT table_name 
 FROM information_schema.tables 
 WHERE table_schema = 'public';
+
+INSERT INTO public.pelanggan (nama, email, kota) VALUES 
+('Ali Sari', 'ali@example.com', 'Jakarta'),
+('Budi', 'budi@example.com', 'Bandung');
+
+INSERT INTO public.kategori (nama_kategori) VALUES 
+('Elektronik'), ('Fashion'), ('Makanan');
+
+INSERT INTO public.produk (nama, harga, stok, kategori_id) VALUES 
+('Laptop', 7000000, 10, 1),
+('Baju', 150000, 50, 2),
+('Snack', 25000, 100, 3);
+
+INSERT INTO public.transaksi (pelanggan_id, produk_id, jumlah, total_harga) VALUES 
+(1, 1, 1, 7000000),
+(2, 2, 3, 450000);
