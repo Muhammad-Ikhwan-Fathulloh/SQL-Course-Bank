@@ -134,6 +134,51 @@ Indexing digunakan untuk mempercepat query dengan membuat struktur data yang mem
   DROP INDEX idx_pelanggan_nama;
   ```
 
+  Jika indeks `idx_pelanggan_nama` sudah dibuat pada tabel `pelanggan` dengan kolom `nama`, maka indeks ini akan digunakan oleh database untuk mempercepat pencarian data berdasarkan kolom `nama`.  
+
+### **Cara Menggunakan Indeks dalam Query**
+Indeks akan otomatis digunakan oleh database saat Anda menjalankan query yang memanfaatkan kolom `nama`, misalnya:
+
+#### **1. Query Pencarian dengan WHERE**
+```sql
+SELECT * FROM pelanggan WHERE nama = 'Budi';
+```
+Karena kolom `nama` sudah diindeks, database akan menggunakan indeks untuk mempercepat pencarian `Budi` dalam tabel `pelanggan`.
+
+#### **2. Query dengan LIKE (Tergantung Pola)**
+Indeks akan digunakan jika pencarian tidak diawali dengan `%`:
+```sql
+SELECT * FROM pelanggan WHERE nama LIKE 'Bud%'; -- Indeks digunakan
+SELECT * FROM pelanggan WHERE nama LIKE '%udi'; -- Indeks tidak digunakan
+```
+Pola dengan `%` di awal tidak dapat menggunakan indeks karena membutuhkan full table scan.
+
+#### **3. Query dengan ORDER BY**
+Jika query menggunakan `ORDER BY nama`, indeks dapat digunakan untuk menghindari sorting tambahan:
+```sql
+SELECT * FROM pelanggan ORDER BY nama;
+```
+
+#### **4. Query dengan JOIN**
+Jika tabel `pelanggan` di-`JOIN` dengan tabel lain berdasarkan `nama`, indeks dapat mempercepat proses:
+```sql
+SELECT o.id, p.nama 
+FROM orders o
+JOIN pelanggan p ON o.nama_pelanggan = p.nama;
+```
+
+#### **5. Cek Apakah Indeks Digunakan dengan EXPLAIN**
+Anda bisa mengecek apakah indeks digunakan dalam query dengan `EXPLAIN`:
+```sql
+EXPLAIN SELECT * FROM pelanggan WHERE nama = 'Budi';
+```
+Jika indeks digunakan, akan muncul `idx_pelanggan_nama` di kolom `possible_keys` atau `key`.
+
+---  
+### **Catatan**  
+- Indeks mempercepat **pencarian** tetapi **memperlambat INSERT, UPDATE, dan DELETE** karena database harus memperbarui indeks.  
+- Jika indeks tidak digunakan dalam query tertentu, pertimbangkan **menganalisis struktur indeks dan query**.  
+
 ### **5.2 Execution Plan**
 Execution plan digunakan untuk menganalisis performa query dengan melihat bagaimana database akan mengeksekusi query tersebut.
 
