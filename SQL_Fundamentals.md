@@ -151,11 +151,6 @@ SELECT * FROM produk WHERE stok <= 10;
 ## **7. Filtering Data**
 
 ### **7.1 Operator Logika: AND, OR, NOT**
-Berikut adalah penjelasan lengkap beserta contoh penggunaan operator logika **OR** dan **NOT** dalam SQL:
-
----
-
-### **7.1 Operator Logika: AND, OR, NOT**
 
 #### **1. AND**
 Operator **AND** digunakan untuk menampilkan data yang memenuhi **semua kondisi** yang diberikan.
